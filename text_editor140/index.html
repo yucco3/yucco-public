@@ -1,0 +1,29 @@
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <title>twitter気分で文章書けるエディター</title>
+        <link rel="stylesheet" type="text/css" href="css/style.css?v=2">    
+    </head>
+
+    <body>
+        <div id="contents">
+            <h1>twitter気分で文章書けるエディター</h1>
+            <div id="comment">
+                下の入力欄に140字以内のテキストを入力して投稿ボタンを押すと、上の表示欄に追加されていきます。<br />
+                140字以上入力すると投稿出来ません。<br />
+                入力内容はどこにも保存されません。<br />
+                （完成したらエディタ等にコピペして保存してください）<br />
+
+            </div>
+            <div id="display">
+                <textarea id="display_text" rows="30" cols="70" class="display_area"></textarea>
+            </div>
+            <div id="input">
+                <span id="count">0</span>
+                <textarea id="input_text" rows="5" cols="70" class="input_erea"></textarea>
+                <button id="submit" onclick="submit()">投稿</button>
+            </div>
+        </div>
+    </body>
+    <script src="js/editor.js"></script>
+</html>
