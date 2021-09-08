@@ -1,0 +1,46 @@
+body{
+    background-color: aliceblue;
+    color:#111;
+    width:100%;
+    height: 100vh;
+}
+
+#contents{
+    width:50%;
+    height: 90vh;
+    margin:auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+#display{
+    display: flex;
+    justify-content: center;
+}
+
+#display_text{
+    border:none;
+    background-color: #FFF;
+    width:80%;
+}
+
+#input{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+#input_text{
+    width:80%;
+}
+
+button{
+    margin:0.5vh;
+    background-color: cornflowerblue;
+    width:20%;
+    height: 5vh;
+    color:#FFF;
+    border: none;
+}
