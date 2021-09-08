@@ -32,6 +32,19 @@ body{
     align-items: center;
 }
 
+#count{
+    width:80%;
+    text-align: left;
+}
+
+.count_nomal{
+    color:#333;
+}
+.count_over{
+    color:#660000;
+    background-color: darksalmon;
+}
+
 #input_text{
     width:80%;
 }
