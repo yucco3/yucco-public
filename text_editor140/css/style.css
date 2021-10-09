@@ -3,31 +3,43 @@ body{
     color:#111;
     width:100%;
     height: 100vh;
+    margin:0;
 }
 
 #contents{
-    width:50%;
-    height: 90vh;
+    width:80%;
+    height: 100vh;
     margin:auto;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
 }
 
+h1{
+    width:100%;
+    font-size: 5vmin;
+    margin:0;
+}
+
 #comment{
     color:#333;
-    font-size: 0.8rem;
+    font-size: 2.5vmin;
 }
 
 #display{
     display: flex;
+    height: 50vh;
     justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
+
+
 
 #display_text{
     border:none;
-    background-color: #FFF;
-    width:80%;
+    width:90%;
+    height: 100%;
 }
 
 #input{
@@ -35,11 +47,13 @@ body{
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
+    height: 20vh;
 }
 
 #count{
-    width:80%;
+    width:90%;
     text-align: left;
+    font-size: 2vh;
 }
 
 .count_nomal{
@@ -51,14 +65,27 @@ body{
 }
 
 #input_text{
-    width:80%;
+    width:90%;
+    height: 10vh;
+}
+
+textarea{
+    font-size:2.5vmin;
 }
 
 button{
-    margin:0.5vh;
+    margin:1vh;
     background-color: cornflowerblue;
-    width:20%;
+    width:35%;
     height: 5vh;
     color:#FFF;
     border: none;
+    font-size: 3vh;
+}
+
+.button_group{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
 }
