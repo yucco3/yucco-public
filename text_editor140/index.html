@@ -2,7 +2,7 @@
     <head>
         <meta charset="utf-8" />
         <title>気軽に文章書けるエディター</title>
-        <link rel="stylesheet" type="text/css" href="css/style.css?v=3">    
+        <link rel="stylesheet" type="text/css" href="css/style.css?v=4">    
     </head>
 
     <body>
@@ -10,11 +10,16 @@
             <h1>気軽に文章書けるエディター</h1>
             <div id="comment">
                 下の入力欄に140字以内のテキストを入力して投稿ボタンを押すと、上の表示欄に追加されていきます。<br />
-                140字以上入力すると投稿出来ません。<br />
-                入力内容はどこにも保存されません。<br />
+                140字以上入力すると投稿出来ません。入力内容はどこにも保存されません。<br />
                 （完成したらメモ帳等にコピペして保存してください）<br />
-
+                
             </div>
+
+            <div>
+                投稿回数：<span id="submit_count">0</span>／
+                総文字数：<span id="total_count">0</span>
+            </div>
+
             <div id="display">
                 <textarea id="display_text" rows="30" cols="70" class="display_area"></textarea>
                 <div id="display_area_buttons" class="button_group">
@@ -22,11 +27,15 @@
                     <button name="copy" id="copy" onclick="copyText()">コピー</button>
                 </div>
             </div>
+
+            <div id="copy_message"></div>
             <div id="input">
                 <span id="count">0</span>
                 <textarea id="input_text" class="input_erea"></textarea>
                 <button name="submit" id="submit" onclick="submit()">投稿</button>
+                <button name="help" id="help" onclick="restore()">緊急ボタン</button>
             </div>
+            <div id="restore"></div>
         </div>
     </body>
     <script src="js/editor.js?v=1"></script>

@@ -23,7 +23,7 @@ h1{
 
 #comment{
     color:#333;
-    font-size: 2.5vmin;
+    font-size: clamp(6px, 2.5vmin, 16pt);
 }
 
 #display{
@@ -47,7 +47,7 @@ h1{
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    height: 20vh;
+    height: 30vh;
 }
 
 #count{
@@ -66,11 +66,11 @@ h1{
 
 #input_text{
     width:90%;
-    height: 10vh;
+    height: 15vh;
 }
 
 textarea{
-    font-size:2.5vmin;
+    font-size:(10px, 2.5vmin, 16px);
 }
 
 button{
@@ -83,9 +83,21 @@ button{
     font-size: 3vh;
 }
 
+#help{
+    height: 3vh;
+    font-size:2vh;
+    width:10%;
+    background-color: dimgray;
+}
+
 .button_group{
     width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
+}
+
+#copy_message{
+    font-size:2vmin;
+    color:darkcyan;
 }
