@@ -4,9 +4,7 @@ function submit(){
     if(input_text.length > 140){return}
 
     let old_text = DISPLAY_TEXT_OBJECT.value;
-    let connect = ""
-    if(old_text != ""){connect = "\n"}
-    let new_text = old_text + connect + input_text
+    let new_text = old_text + input_text
 
     SUBMIT_COUNT = SUBMIT_COUNT + 1;
     let total_count = new_text.length;
