@@ -1,19 +1,32 @@
 run()
 
+// 実行関数
 function run(){
+    // ドキュメント内の、アクセス可能なストーリー全てを取得する
     var document = app.activeDocument
     var valid_stories = get_valid_stories(document)
 
     while(true){
+        // 親文字とルビの入力を受け取る
         var ruby = input_ruby_text()
         if(ruby == null){return}
 
+        // ルビを振る文字を検索し、検索結果に対してルビを有効にする処理をする
         var target_word_list = search(ruby.base_text, valid_stories[0])
         set_ruby(target_word_list,ruby.ruby_text)
+
+        // 繰り返すか聞く
         if(!confirm("「" + ruby.base_text + "」に「" + ruby.ruby_text + "」とルビを振りました。続けますか？")){return}
     }
 }
 
+// 親文字とルビ文字を保存するためのオブジェクト
+function Ruby(base_text, ruby_text){
+    this.base_text = base_text
+    this.ruby_text = ruby_text
+}
+
+// ルビ文字の入力を受け取る
 function input_ruby_text(){
     var base_text = input_prompt("ルビを振りたい文字列（親文字）")
     if(base_text == null){return null}
@@ -33,11 +46,6 @@ function input_ruby_text(){
             return input_text
         }
     }
-}
-
-function Ruby(base_text, ruby_text){
-    this.base_text = base_text
-    this.ruby_text = ruby_text
 }
 
 
