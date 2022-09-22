@@ -1,60 +1,23 @@
-var ruby_list = [
-/////////////////////////////////////////////////////////////////
-// 自動でルビを振りたい単語を、サンプルに倣ってここに記述してください //
-// 一行につき、
-// ["親文字","ルビ"],
-// と記入してください。行末のカンマは必ず必要です。
-/////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////
-// ここから下は、スクリプトの知識がある方以外編集しないで下さい //
-////////////////////////////////////////////////////////////
-]
-
 run()
 
 // 実行関数
 function run(){
     // ドキュメント内の、アクセス可能なストーリー全てを取得する
-    try{
-        var document = app.activeDocument
-    }catch(e){
-        alert("ドキュメントを開いてから実行して下さい")
-        return
-    }
-
+    var document = app.activeDocument
     var valid_stories = get_valid_stories(document)
-    if(valid_stories.length <= 0){
-        alert("ドキュメント内に、編集可能なストーリーがありません。テキストを入力してから実行してください")
-        return
-    }
-
-    for(var index = 0; index < ruby_list.length; index++){
-        var ruby = new Ruby(ruby_list[index][0],ruby_list[index][1])
-        if(!confirm("「" + ruby.base_text + "」に「" + ruby.ruby_text + "」とルビを振りますか？")){continue}
-        set_ruby_service(ruby, valid_stories)
-    }
-
-    if(!confirm("続けて、ルビを振りたい単語を入力しますか？")){return}
 
     while(true){
         // 親文字とルビの入力を受け取る
         var ruby = input_ruby_text()
         if(ruby == null){return}
 
-        set_ruby_service(ruby, valid_stories)
+        // ルビを振る文字を検索し、検索結果に対してルビを有効にする処理をする
+        var target_word_list = search(ruby.base_text, valid_stories[0])
+        set_ruby(target_word_list,ruby.ruby_text)
 
         // 繰り返すか聞く
         if(!confirm("「" + ruby.base_text + "」に「" + ruby.ruby_text + "」とルビを振りました。続けますか？")){return}
     }
-}
-
-// 親文字を取得してルビを振る
-function set_ruby_service(ruby, stories){
-    // ルビを振る文字を検索し、検索結果に対してルビを有効にする処理をする
-    var target_word_list = search(ruby.base_text, stories[0])
-    set_ruby(target_word_list,ruby.ruby_text)
 }
 
 // 親文字とルビ文字を保存するためのオブジェクト
@@ -116,7 +79,6 @@ function set_ruby(target_word_list, ruby_text){
         target.rubyString = ruby_text
         target.rubyType = RubyTypes.GROUP_RUBY
         target.rubyFlag = true
-        target.rubyOpenTypePro = false
     }
 }
 
