@@ -75,10 +75,24 @@ function search(keyword, story){
 // ルビを振る
 function set_ruby(target_word_list, ruby_text){
     for(var index = 0; index < target_word_list.length; index++){
+
         var target = target_word_list[index]
+        if(target.contents[0] == "「"){target = remove_blackets(target)}
+
         target.rubyString = ruby_text
         target.rubyType = RubyTypes.GROUP_RUBY
         target.rubyFlag = true
+        target.rubyOpenTypePro = false
+    }
+
+    // ルビを振る対象文字列に「」が含まれていた場合、「」を除去してルビを振る
+    function remove_blackets(target_text){
+        var new_keyword = target_text.contents.replace(/[「」]/g, "")
+        app.findTextPreferences = NothingEnum.nothing;
+        app.changeTextPreferences = NothingEnum.nothing;
+        app.findTextPreferences.findWhat = new_keyword;
+        return target_text.findText(false)[0]
     }
 }
+
 

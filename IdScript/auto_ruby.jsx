@@ -1,11 +1,13 @@
 var ruby_list = [
 /////////////////////////////////////////////////////////////////
-// 自動でルビを振りたい単語を、サンプルに倣ってここに記述してください //
-// 一行につき、
-// ["親文字","ルビ"],
-// と記入してください。行末のカンマは必ず必要です。
+// ここから上はスクリプトの知識がある方以外編集しないでください
+// ※スクリプトの編集は自由ですが、再配布は禁止です※
+// ※スクリプトを編集したことで不具合が発生しても、責任は負いかねます※
 /////////////////////////////////////////////////////////////////
-
+// 自動でルビを振りたい単語を、サンプルに倣ってこの下に記述してください
+// 一行につき、「["親文字","ルビ"],」と記入してください。行末のカンマは必ず必要です。
+/////////////////////////////////////////////////////////////////
+["親文字","ルビ"],
 
 /////////////////////////////////////////////////////////////
 // ここから下は、スクリプトの知識がある方以外編集しないで下さい //
@@ -112,11 +114,23 @@ function search(keyword, story){
 // ルビを振る
 function set_ruby(target_word_list, ruby_text){
     for(var index = 0; index < target_word_list.length; index++){
+
         var target = target_word_list[index]
+        if(target.contents[0] == "「"){target = remove_blackets(target)}
+
         target.rubyString = ruby_text
         target.rubyType = RubyTypes.GROUP_RUBY
         target.rubyFlag = true
         target.rubyOpenTypePro = false
+    }
+
+    // ルビを振る対象文字列に「」が含まれていた場合、「」を除去してルビを振る
+    function remove_blackets(target_text){
+        var new_keyword = target_text.contents.replace(/[「」]/g, "")
+        app.findTextPreferences = NothingEnum.nothing;
+        app.changeTextPreferences = NothingEnum.nothing;
+        app.findTextPreferences.findWhat = new_keyword;
+        return target_text.findText(false)[0]
     }
 }
 
