@@ -3,18 +3,28 @@ app.preferences.setBooleanPreference("ShowExternalJSXWarning", false);
 function SETTING(){
     this.ARTBORD_SPACING = 100
 }
-const setting = new SETTING() 
+var setting = new SETTING() 
 
 // DOMAIN　////////////////////////////////////////////////////////////////
 
-function Size_A6(){
-    this.width = new mm(105);
-    this.height = new mm(148);
-}
+function Size(size){
+    if(size != "A5" && size != "A6" && size != "B5"){
+        throw Error("サイズはB5、A5、A6のいずれかで指定して下さい")
+    }
+    this.width = __get_width(size)
+    this.height = __get_height(size)
 
-function Size_A5(){
-    this.width = new mm(148);
-    this.height = new mm(210);
+    function __get_width(size){
+        if(size == "B5"){return new mm(182)}
+        if(size == "A5"){return new mm(148)}
+        if(size == "A6"){return new mm(105)}
+    }
+
+    function __get_height(size){
+        if(size == "B5"){return new mm(257)}
+        if(size == "A5"){return new mm(210)}
+        if(size == "A6"){return new mm(148)}    
+    }
 }
 
 function mm(number_mm){
@@ -48,20 +58,21 @@ function Rect(rect){
     this.get_height_px = function(){return this.h_px}
 }
 
-function BookSize(width_mm, height_mm, se_width_mm){
+function BookSize(width_mm, height_mm, se_width_mm, need_cover, sode_width_mm){
     this.width = width_mm;
     this.height = height_mm;
     this.se_width = se_width_mm;
-    this.sode_width = new mm(70);
+    this.sode_width = sode_width_mm;
+    this.need_cover = need_cover;
 
     this.frontpage_artboard_width_px = (this.width.to_px() * 2) + this.se_width.to_px();
     this.frontpage_artboard_heigth_px = this.height.to_px();
     this.cover_artboard_width_px = (this.width.to_px() * 2) + this.se_width.to_px() + (this.sode_width.to_px() * 2)
 
-    this.vartical_guide_coodinates = __calc_vartical_guide_coodinates(this.width, this.sode_width, this.se_width)
-    this.horizontal_guide_coodinates = __calc_horizontal_guide_coodinates(this.height)
+    this.vartical_guide_coodinates = __calc_vartical_guide_coodinates(this.need_cover,this.width, this.sode_width, this.se_width)
+    this.horizontal_guide_coodinates = __calc_horizontal_guide_coodinates(this.need_cover, this.height)
 
-    function __calc_vartical_guide_coodinates(width, sode_width, se_width){
+    function __calc_vartical_guide_coodinates(need_cover, width, sode_width, se_width){
         var mm_3 = new mm(3);
 
         var x1 = 0;                 // 表紙仕上がりサイズ左端
@@ -74,19 +85,28 @@ function BookSize(width_mm, height_mm, se_width_mm){
         var x8 = width.to_px() + se_width.to_px() + width.to_px() - mm_3.to_px()    // 裏表紙印刷安全範囲右端
         var x9 = width.to_px() + se_width.to_px() + width.to_px()                   // 裏表紙仕上がりサイズ右端
 
-        var x10 = 0 - sode_width.to_px() + mm_3.to_px() // 袖印刷安全範囲左端
-        var x11 = width.to_px() + se_width.to_px() + width.to_px() + sode_width.to_px() - mm_3.to_px(); // 袖印刷安全範囲右端
+        var result = [x1, x2, x3, x4, x5, x6, x7, x8, x9]
 
-        return [x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11]
+        if(need_cover){
+            var x10 = 0 - sode_width.to_px() + mm_3.to_px() // 袖印刷安全範囲左端
+            var x11 = width.to_px() + se_width.to_px() + width.to_px() + sode_width.to_px() - mm_3.to_px(); // 袖印刷安全範囲右端
+            result.push(x10, x11)
+        }
+
+        return result
     }
 
-    function __calc_horizontal_guide_coodinates(height){
+    function __calc_horizontal_guide_coodinates(need_cover, height){
         var mm_3 = new mm(3)
         var y1 = height.to_px() - mm_3.to_px() // 表紙印刷安全範囲天
         var y2 = mm_3.to_px() // 表紙印刷安全範囲地
-        var y3 = (setting.ARTBORD_SPACING * -1) - mm_3.to_px() // カバー印刷安全範囲天
-        var y4 = (setting.ARTBORD_SPACING * -1) - height.to_px() + mm_3.to_px() // カバー印刷安全範囲地
-        return [y1, y2, y3, y4]
+        var result = [y1, y2]
+        if(need_cover){
+            var y3 = (setting.ARTBORD_SPACING * -1) - mm_3.to_px() // カバー印刷安全範囲天
+            var y4 = (setting.ARTBORD_SPACING * -1) - height.to_px() + mm_3.to_px() // カバー印刷安全範囲地
+            result.push(y3,y4)
+        }
+        return result
     }
 }
 
@@ -149,22 +169,48 @@ function add_straight_guide(start_coordinate, end_coordinate){
 // カバーの有無を指定できるようにする
 
 function main(){
-    // A6サイズを定義
-    var size_a6 = new Size_A6();
+
+    // 本のサイズを受け取る
+    var input_size = prompt("サイズをB5、A5、A6のいずれかで入力して下さい。(半角アルファベット大文字＋半角数字)","A5")
+    try{
+        var size = new Size(input_size);
+    }catch(error){
+        alert(error);
+        return;
+    }
     
     // 背幅を受け取る
-    var input = prompt("背幅を、ミリ単位で、半角数字で入力してください","3");
-    var se_width = new mm(input);
+    var input_se = prompt("背幅を、ミリ単位で、半角数字で入力してください","3");
+    var se_width = new mm(input_se);
+
+    // カバーが要るか確認
+    var need_cover = confirm("カバー用のアートボードを作成しますか？", false, "カバー確認");
+    if(need_cover){
+        // カバーが必要なら袖幅を受け取る
+        var input_sode = prompt("カバーの袖幅を、ミリ単位で、半角数字で入力してください","70");
+        try{
+        var sode_width = new mm(input_sode);
+        }catch(error){
+            alert("カバーの袖幅は、半角数字で入力してください");
+            return
+        }
+        var artboard_count = 2
+    }else{
+        var sode_width = new mm(0)
+        var artboard_count = 1
+    }
 
     // 本のサイズを定義
-    var book_size = new BookSize(size_a6.width, size_a6.height, se_width)
+    var book_size = new BookSize(size.width, size.height, se_width, need_cover, sode_width)
 
     // アートボードを作成
-    create_new_document(book_size.frontpage_artboard_width_px, book_size.frontpage_artboard_heigth_px, 2);
+    create_new_document(book_size.frontpage_artboard_width_px, book_size.frontpage_artboard_heigth_px, artboard_count);
 
-    // カバー用のアートボードを、袖幅込みのサイズにリサイズ
-    var artboard_for_cover = app.activeDocument.artboards[1];
-    resize_artboard(artboard_for_cover, book_size.cover_artboard_width_px, book_size.frontpage_artboard_heigth_px);
+    if(need_cover){
+        // カバー用のアートボードを、袖幅込みのサイズにリサイズ
+        var artboard_for_cover = app.activeDocument.artboards[1];
+        resize_artboard(artboard_for_cover, book_size.cover_artboard_width_px, book_size.frontpage_artboard_heigth_px);
+    }
 
     // 各所に必要なガイドを作成
     for(index in book_size.vartical_guide_coodinates){
@@ -175,7 +221,8 @@ function main(){
         var y = book_size.horizontal_guide_coodinates[index]
         create_horizontal_guide(y);
     }
+
+    alert("アートボードを作成しました。ドキュメント設定から裁ち落としを設定して下さい"); 
 }
 
 main();
-alert("ドキュメント設定から裁ち落としを設定して下さい"); 
